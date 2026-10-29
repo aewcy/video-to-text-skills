@@ -60,68 +60,8 @@ video-to-text-skills/
 介意的话可以改 `pull.py` 里的 `PARSE_API`，或只用 B站 / 其它 yt-dlp 支持的站点。
 
 ## 用法
-
-```bat
-:: 一条（默认 small）
-.venv\Scripts\python.exe .dsh\skills\wenan-text\scripts\pull.py "<链接>"
-
-:: 要更准（≤10 分钟才会真的用 medium，超时会自动降 small）
-.venv\Scripts\python.exe .dsh\skills\wenan-text\scripts\pull.py "<链接>" --model medium
-
-:: 一批（同一批号）
-.venv\Scripts\python.exe .dsh\skills\wenan-text\scripts\pull.py "<链接1>" "<链接2>"
-```
-
-跑完得到：
-
-```
-outputs/batches/batch_0002/<视频标题>/
-    1-纯文字.txt      ← 未校对 ASR（原始版，禁止覆盖）
-    2-时间轴.txt
-    3-字幕.srt
-    meta.json
-```
-
-然后按 `SKILL.md` 第 5 步做**三道校对**，产出 `1-纯文字（校对）.txt` / `2-时间轴（校对）.txt` /
-`3-字幕（校对）.srt`，再生成成品：
-
-```bat
-.venv\Scripts\python.exe .dsh\skills\wenan-text\scripts\build_md.py ^
-  --srt "<批目录>\3-字幕（校对）.srt" ^
-  --text "<批目录>\1-纯文字（校对）.txt" ^
-  --outdir "文案\<日期>_<短标题>" ^
-  --title "<完整标题>" --url "<链接>" --author "<作者>" ^
-  --model small --proofread "3 轮 N 处" ^
-  --when "<YYYY-MM-DD>"
-
-.venv\Scripts\python.exe .dsh\skills\wenan-text\scripts\check.py batch_0002
-```
-
-成品结构：
-
-```
-文案\<日期>_<短标题>/
-    正文.md      ← 不带时间轴，按段落/小标题排好，用来读和复制
-    时间轴.md    ← 每行一条 [时:分:秒] 文字
-    字幕.srt     ← 播放器 / 剪映用
-```
-
-`check.py` 检查校对版是否存在、语速（120~450 字/分钟）、半角标点、残留同音词、段落长度、
-字幕时间轴单调性；结果只有 **PASS（exit 0）** / **WARN（exit 2）**，没有 FAIL。
-
-## 关于校对
-
-`scripts/proofread_example.py` 是**映射表写法样例**，不是通用工具：
-
-- 它的 `FIXES` 只覆盖某一期视频的同音字/错字，直接对别的批次跑没意义；
-- 它会**直接覆盖**批次的校对三件套，对已经人工校对过的内容重跑会静默降级。
-
-正确用法是复制一份、按当前视频内容重建 `FIXES`，再跑。校对三道：
-
-1. 同音字批量替换（专名、术语、平台名）
-2. 逐段通读改断句、数字、语境（`9.15 / 9.20 / 9.25 / 9.30` 这类数字不能错）
-3. 残留扫描：半角标点、可疑同音词、重复词
-
+- /wenan-text <链接>   提取文案
+- /wenan-pre-position  查看/配置前置
 ## 限制
 
 - 不支持需登录/付费内容；纯图集、无人声/纯音乐不出空文件，会如实报告
