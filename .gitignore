@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 本地模型 / 媒体 / 产物
+models/
+outputs/
+uploads/
+文案/
+*.wav
+*.mp4
+*.m4a
+*.part
+
+# 环境与编辑器
+.env
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
