@@ -20,30 +20,12 @@ video-to-text-skills/
 ```
 
 ## 安装到 DSH
-复制连接，找ai装。
+复制链接，找ai装。
 
-（把这个仓库链接发给 AI，让它把 `wenan-text/`、`wenan-pre-position/` 复制到 `<项目根>/.dsh/skills/`
-或 `%USERPROFILE%\.dsh\skills\`；DSH 按最近的 `.git` 判定项目根，没有 `.git` 时用用户级目录。）
-
-## 前置校验（推荐先跑）
-
-装好后先跑 `/wenan-pre-position`（或直接用脚本）：
-
-```bat
-:: 只检查，出报告（退出码 0=齐全 / 2=有缺失）
-.venv\Scripts\python.exe .dsh\skills\wenan-pre-position\scripts\preflight.py
-
-:: 缺 Python 包 / 模型时自动补齐；下载慢加 --hf-mirror
-.venv\Scripts\python.exe .dsh\skills\wenan-pre-position\scripts\preflight.py --fix --hf-mirror
-
-:: 只看要做什么，不执行
-.venv\Scripts\python.exe .dsh\skills\wenan-pre-position\scripts\preflight.py --fix --dry-run
-```
-
-检查项：Python 版本 / 是否在 `.venv`、`faster-whisper` / `yt-dlp` / `numpy` / `opencc`、`ffmpeg`、
-`app.py` 及所需函数、`models/<model>` 完整性、GPU、磁盘空间、目录可写、模型下载源是否可达。
-`--fix` 只会自动处理**Python 包 / 模型 / 目录**；`ffmpeg`、`.venv`、`app.py` 缺失时只给安装命令，不会乱动系统。
-
+## 用法
+- /wenan-text <链接>   提取文案
+- /wenan-pre-position  查看/配置前置
+- 
 ## 依赖
 
 本仓库**只含 skill 与脚本**，真正的运行环境需要自备：
@@ -59,9 +41,6 @@ video-to-text-skills/
 另外，抖音解析走第三方在线接口 `video.zacao.top`（会把你的链接发给对方），失败才回落 yt-dlp；
 介意的话可以改 `pull.py` 里的 `PARSE_API`，或只用 B站 / 其它 yt-dlp 支持的站点。
 
-## 用法
-- /wenan-text <链接>   提取文案
-- /wenan-pre-position  查看/配置前置
 ## 限制
 
 - 不支持需登录/付费内容；纯图集、无人声/纯音乐不出空文件，会如实报告
