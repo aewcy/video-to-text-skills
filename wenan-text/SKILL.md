@@ -26,6 +26,12 @@ whenToUse: 用户发了抖音或B站视频链接，想要视频里的文字稿�
 
 依赖（本仓库不含）：Python 3.12 + venv、`faster-whisper`、`yt-dlp`、`ffmpeg`、`models/small` 或 `models/medium`，以及本地的 `app.py`——`pull.py` 会复用它的 `load_model` / `load_wav_16k` / `extract_audio` / `probe_media` / `normalize_cjk` / `parse_srt`。
 
+## 前置校验
+
+首次使用、换机器、或报缺依赖/缺模型时，先跑 `/wenan-pre-position`（同名目录里的 `scripts/preflight.py`）：
+检查 Python 包、ffmpeg、app.py、模型、GPU、磁盘、网络；缺 Python 包/模型可加 `--fix` 自动补齐（支持 `--hf-mirror`）。
+检查 PASS 再进入下面的流程。
+
 ## 流程（7 步，不可跳）
 
 ### 1 解析

@@ -7,17 +7,42 @@
 
 ```
 video-to-text-skills/
-└── wenan-text/                 ← 一个 DSH skill（目录名 = skill 名）
-    ├── SKILL.md                ← 流程正文：7 步、验收标准、异常处理、命令速查
-    └── scripts/
-        ├── pull.py             ← 链接 → 下载 → 字幕/ASR → 三件套 → 归档（30 批滚动）
-        ├── build_md.py         ← 校对稿 → 正文.md + 时间轴.md + 字幕.srt
-        ├── check.py            ← 验收（PASS / WARN）
-        └── proofread_example.py← 校对映射表写法样例（不是通用工具，见下）
+├── wenan-text/                 ← 主 skill：链接 → 文字稿
+│   ├── SKILL.md                ← 流程正文：7 步、验收标准、异常处理、命令速查
+│   └── scripts/
+│       ├── pull.py             ← 链接 → 下载 → 字幕/ASR → 三件套 → 归档（30 批滚动）
+│       ├── build_md.py         ← 校对稿 → 正文.md + 时间轴.md + 字幕.srt
+│       ├── check.py            ← 验收（PASS / WARN）
+│       └── proofread_example.py← 校对映射表写法样例（不是通用工具，见下）
+└── wenan-pre-position/         ← 前置 skill：环境校验 / 补齐
+    ├── SKILL.md
+    └── scripts/preflight.py    ← 检查 Python 包/ffmpeg/app.py/模型/GPU/磁盘/网络
 ```
 
 ## 安装到 DSH
-复制连接，找ai装
+复制连接，找ai装。
+
+（把这个仓库链接发给 AI，让它把 `wenan-text/`、`wenan-pre-position/` 复制到 `<项目根>/.dsh/skills/`
+或 `%USERPROFILE%\.dsh\skills\`；DSH 按最近的 `.git` 判定项目根，没有 `.git` 时用用户级目录。）
+
+## 前置校验（推荐先跑）
+
+装好后先跑 `/wenan-pre-position`（或直接用脚本）：
+
+```bat
+:: 只检查，出报告（退出码 0=齐全 / 2=有缺失）
+.venv\Scripts\python.exe .dsh\skills\wenan-pre-position\scripts\preflight.py
+
+:: 缺 Python 包 / 模型时自动补齐；下载慢加 --hf-mirror
+.venv\Scripts\python.exe .dsh\skills\wenan-pre-position\scripts\preflight.py --fix --hf-mirror
+
+:: 只看要做什么，不执行
+.venv\Scripts\python.exe .dsh\skills\wenan-pre-position\scripts\preflight.py --fix --dry-run
+```
+
+检查项：Python 版本 / 是否在 `.venv`、`faster-whisper` / `yt-dlp` / `numpy` / `opencc`、`ffmpeg`、
+`app.py` 及所需函数、`models/<model>` 完整性、GPU、磁盘空间、目录可写、模型下载源是否可达。
+`--fix` 只会自动处理**Python 包 / 模型 / 目录**；`ffmpeg`、`.venv`、`app.py` 缺失时只给安装命令，不会乱动系统。
 
 ## 依赖
 
