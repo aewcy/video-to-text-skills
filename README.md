@@ -3,8 +3,6 @@
 把**抖音 / B站等视频链接**变成可复制文字稿的 [DSH](https://github.com/deepseek-ai/deepseek-harness) skill：
 解析 → 下载 → 字幕优先 / faster-whisper 识别 → **人工校对** → 生成 Markdown（正文 + 时间轴）+ srt 字幕 → 自动验收 → 按 30 批滚动归档。
 
-> 核心原则：ASR 结果不能直接交付。small 模型同音字错误很多，流程里把「人工校对」做成了必做的一步。
-
 ## 仓库结构
 
 ```
@@ -19,25 +17,7 @@ video-to-text-skills/
 ```
 
 ## 安装到 DSH
-
-DSH 会把以下位置的 `<name>/SKILL.md` 或 `<name>.md` 加载为 skill：
-
-- **项目级**：`<项目根>/.dsh/skills/` — 把 `wenan-text/` 整个目录复制进去
-- **用户级**：`%USERPROFILE%\.dsh\skills\`（Windows） — 所有项目可用
-
-```bat
-:: 项目级
-xcopy /E /I wenan-text "<你的项目根>\.dsh\skills\wenan-text"
-
-:: 用户级
-xcopy /E /I wenan-text "%USERPROFILE%\.dsh\skills\wenan-text"
-```
-
-> ⚠️ DSH 判定「项目根」的方式是从会话 cwd 向上找最近的 `.git`。如果目标目录没有 `.git`，
-> 项目级 skill 不会被扫到——要么给项目 `git init`，要么改用用户级安装。
-
-装好后：`/` 菜单里会出现 `wenan-text`（用户可调用的 skill 会成为斜杠命令），也可以直接输入
-`/wenan-text <链接>`；自然语言「把这个视频转成文字 <链接>」也会命中。
+复制连接，找ai装
 
 ## 依赖
 
