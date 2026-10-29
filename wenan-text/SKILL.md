@@ -51,16 +51,18 @@ whenToUse: 用户发了抖音或B站视频链接，想要视频里的文字稿�
 `faster-whisper`，GPU float16，VAD 开，`temperature=[0.0]`（不做回退重试，否则长视频卡死）。
 默认 `small`（快）；显式 `--model medium` 且视频 ≤ 10 分钟才用 `medium`，超过 10 分钟脚本自动降回 `small`。
 
-### 5 校对（必做，交付前）
+### 5 校对（必做，交付前）→ 交给 `/wenan-text-proofread`
 
 > ASR 结果**不能直接交付**。small 模型同音字错误很多。
 
-三道：
-1. **同音字批量替换** —— 参考 `scripts/proofread_example.py`，按本条内容建映射表
+这一步已拆成独立 skill：跑 `/wenan-text-proofread`（默认最新批；可带批次/视频关键词）。它会：
+
+1. **同音字批量替换** —— 按本条内容建映射表（参考 `scripts/proofread_example.py` 的写法）
 2. **逐段通读** —— 改专名、术语、数字（9.15/9.20/9.25/9.30 不能错）、断句
 3. **残留扫描** —— 半角标点、可疑同音词、重复词
 
 产出 `1-纯文字（校对）.txt` / `2-时间轴（校对）.txt` / `3-字幕（校对）.srt`，**原始版禁止覆盖**。
+校对完成后回到第 6 步（`build_md.py --text` 用校对稿）继续。
 
 ### 6 生成 Markdown
 

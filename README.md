@@ -14,18 +14,23 @@ video-to-text-skills/
 │       ├── build_md.py         ← 校对稿 → 正文.md + 时间轴.md + 字幕.srt
 │       ├── check.py            ← 验收（PASS / WARN）
 │       └── proofread_example.py← 校对映射表写法样例（不是通用工具，见下）
-└── wenan-pre-position/         ← 前置 skill：环境校验 / 补齐
+├── wenan-pre-position/         ← 前置 skill：环境校验 / 补齐
+│   ├── SKILL.md
+│   └── scripts/preflight.py    ← 检查 Python 包/ffmpeg/app.py/模型/GPU/磁盘/网络
+└── wenan-text-proofread/       ← 校对 skill：第 5 步独立入口
     ├── SKILL.md
-    └── scripts/preflight.py    ← 检查 Python 包/ffmpeg/app.py/模型/GPU/磁盘/网络
+    └── scripts/proofread.py    ← 映射替换 / 复查 / 拒绝覆盖原始版
 ```
 
 ## 安装到 DSH
 复制链接，找ai装。
 
+（把仓库链接发给 AI，让它把三个目录复制到 `<项目根>/.dsh/skills/` 或 `%USERPROFILE%\.dsh\skills\`。）
+
 ## 用法
-- /wenan-text <链接>   提取文案
-- /wenan-pre-position  查看/配置前置
-- 
+- /wenan-text <链接>        提取文案
+- /wenan-pre-position       查看/配置前置（--fix 补齐缺包/模型）
+- /wenan-text-proofread     校对最新批（可带 batch_0002 / 视频关键词）
 ## 依赖
 
 本仓库**只含 skill 与脚本**，真正的运行环境需要自备：
